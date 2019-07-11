@@ -1,6 +1,5 @@
 export class Baraja {
     constructor() {
-        // this.name = name;
         this.cartas = [
             "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "TS", "JS", "QS", "KS", "AS",
             "2H", "3H", "4H", "5H", "6H", "7H", "8H", "9H", "TH", "JH", "QH", "KH", "AH",
