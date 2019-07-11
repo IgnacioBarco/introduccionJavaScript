@@ -8,8 +8,10 @@ export class Baraja {
         ]
     }
 
+    //obtenemos 5 cartas aleatorias, y las que damos las quitamos del array
     obtenerCartas() {
         let cartasDevueltas = [];
+        
         for (let i = 0; i < 5; i++) {
             let posicion = Math.floor(Math.random() * this.cartas.length);
             cartasDevueltas.push(this.cartas[posicion]);

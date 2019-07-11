@@ -6,6 +6,9 @@ export class Poker {
 
         this.resultadoFinal = "";
 
+        let contador = 0;
+
+        // para ordenar las cartas y darles un valor de referencia
         let valorCartas = {
             "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7,
             "8": 8, "9": 9, "T": 10, "J": 11, "Q": 12, "K": 13, "A": 14
@@ -62,21 +65,25 @@ export class Poker {
         });
 
 
-        let contador = 0;
-        // contadorCartas() -- para parejas-trios-poker... color...
+        // evaluamos las cartas del jugador 1
         this.cartasJugador1.forEach(carta => {
+            // contamos cada carta y su color
             this.evaluacionManoJ1[carta[0]]++;
             this.evaluacionManoJ1[carta[1]]++;
 
+            // anotamos el valor de cada carta para verificar si hay escalera
+            // y tambien para comprobar cual es la mayor carta cuando no hay ni pareja
             this.evaluacionManoJ1["valorEscalera"][contador] =
                 valorCartas[carta[0]];
 
+            // si hemos contado 2 cartas iguales y ya habia otra pareja     
             if (this.evaluacionManoJ1[carta[0]] == 2 &&
                 this.evaluacionManoJ1["pareja"] == true) {
                 this.evaluacionManoJ1["doblePareja"] = true;
                 this.evaluacionManoJ1["valorDoblePareja"][1] = 2 * valorCartas[carta[0]];
 
-
+                // si encontramos una pareja. preparamos la doble pareja por si encontramos
+                // otra pareja despues        
             } else if (this.evaluacionManoJ1[carta[0]] == 2) {
                 this.evaluacionManoJ1["pareja"] = true;
                 this.evaluacionManoJ1["valorPareja"] = 2 * valorCartas[carta[0]];
@@ -84,21 +91,32 @@ export class Poker {
 
             }
 
+            // si encontramos tres cartas iguales
             if (this.evaluacionManoJ1[carta[0]] == 3) {
                 this.evaluacionManoJ1["trio"] = true;
                 this.evaluacionManoJ1["valorTrio"] = 3 * valorCartas[carta[0]];
 
+                // si habia una pareja anterior, ponemos a false la pareja para que no
+                // haya problemas con el Full
+                if (this.evaluacionManoJ1["valorPareja"] = 2 * valorCartas[carta[0]]) {
+                    this.evaluacionManoJ1["pareja"] = false;
+                }
+
             }
 
+            // si encontramos cuatro cartas iguales
             if (this.evaluacionManoJ1[carta[0]] == 4) {
                 this.evaluacionManoJ1["poker"] = true;
                 this.evaluacionManoJ1["valorPoker"] = 4 * valorCartas[carta[0]];
 
             }
 
+            //si es la última carta a evaluar
             if (contador === 4) {
+                //la ponemos como valor de la carta mas alta ya que estan ordenadas
                 this.evaluacionManoJ1["valorCartaAlta"] = valorCartas[carta[0]];
 
+                // si las 5 tienen el mismo color
                 if (this.evaluacionManoJ1["S"] === 5 ||
                     this.evaluacionManoJ1["H"] === 5 ||
                     this.evaluacionManoJ1["C"] === 5 ||
@@ -107,6 +125,7 @@ export class Poker {
 
                 }
 
+                // validamos si hay escalera
                 if (this.evaluacionManoJ1["valorEscalera"][4] - this.evaluacionManoJ1["valorEscalera"][3] === 1 &&
                     this.evaluacionManoJ1["valorEscalera"][3] - this.evaluacionManoJ1["valorEscalera"][2] === 1 &&
                     this.evaluacionManoJ1["valorEscalera"][2] - this.evaluacionManoJ1["valorEscalera"][1] === 1 &&
@@ -119,8 +138,9 @@ export class Poker {
             contador++;
         });
 
-
         contador = 0;
+
+        // evaluamos las cartas del jugador 2 (hacemos lo mismo que el jugador 1)
         this.cartasJugador2.forEach(carta => {
             this.evaluacionManoJ2[carta[0]]++;
             this.evaluacionManoJ2[carta[1]]++;
@@ -144,6 +164,10 @@ export class Poker {
             if (this.evaluacionManoJ2[carta[0]] == 3) {
                 this.evaluacionManoJ2["trio"] = true;
                 this.evaluacionManoJ2["valorTrio"] = 3 * valorCartas[carta[0]];
+
+                if (this.evaluacionManoJ2["valorPareja"] = 2 * valorCartas[carta[0]]) {
+                    this.evaluacionManoJ2["pareja"] = false;
+                }
 
             }
 
@@ -178,16 +202,12 @@ export class Poker {
     }
 
 
-
     mostrarEntrada() {
         return `Jugador 1: ${this.cartasJugador1}  -  Jugador2: ${this.cartasJugador2}`
     }
 
 
-
     evaluarJugada(evaluacionMano) {
-        // console.log(evaluacionMano)
-
         // Straight flush(Escalera de Color): 5 cartas de la misma cara pero con 
         // valores consecutivos.En caso de tener escalera las dos manos entonces 
         // gana el que tenga el valor más alto.
@@ -223,7 +243,7 @@ export class Poker {
             // manos tienen escalera entonces gana la que tiene la carta más alta. 
         } else if (evaluacionMano["escalera"] === true) {
             evaluacionMano["valorMano"] = 5000000 + evaluacionMano["valorCartaAlta"];
-            evaluacionMano["jugada"] = "escalera";
+            evaluacionMano["jugada"] = "Escalera";
 
 
             // Three of a Kind(Trio): 3 cartas de la mano tienen el mismo valor.Gana 
@@ -245,14 +265,17 @@ export class Poker {
                 + (100 * evaluacionMano["valorDoblePareja"][0] / 2)
                 + evaluacionMano["valorCartaAlta"];
             evaluacionMano["jugada"] = "dobles parejas";
-      
+
 
             // Pair(Parejas): 2 de las 5 cartas de la mano tienen el mismo valor. Si 
             // las dos manos tienen pareja, entonces gana la que tenga la pareja más 
             // alta.Si ambas parejas son iguales entonces gana el que tenga la carta 
             // más alta. 
         } else if (evaluacionMano["pareja"] === true) {
-            evaluacionMano["valorMano"] = 2999900 + evaluacionMano["valorCartaAlta"];
+            evaluacionMano["valorMano"] =
+                2000000
+                + 100 * evaluacionMano["valorPareja"]
+                + evaluacionMano["valorCartaAlta"];
             evaluacionMano["jugada"] = "pareja";
             return "hay pareja"
 
@@ -263,18 +286,21 @@ export class Poker {
             // así sucesivamente. 
         } else {
             evaluacionMano["valorMano"] = 1000;
-            evaluacionMano["jugada"] = "Carta mas alta";
-            
+            evaluacionMano["jugada"] = "carta mas alta";
+
         }
     }
 
     compararManos() {
-        // si las dos manos no tienen nada
         let i = 4;
         let ver = false;
+
+        // si las dos manos no tienen nada
         if (this.evaluacionManoJ1["valorMano"] === 1000 &&
             this.evaluacionManoJ2["valorMano"] === 1000) {
             do {
+                // comparamos las cartas de una en una hasta que llegamos a la 
+                // ultima, y si son iguales salimos diciendo que hay empate
                 if (this.evaluacionManoJ1["valorEscalera"][i]
                     > this.evaluacionManoJ2["valorEscalera"][i]) {
                     this.resultadoFinal =
@@ -299,6 +325,8 @@ export class Poker {
 
 
         } else {
+            // evaluamos quien ha ganado mediente el valor que le hemos puesto
+            // al evaluar las manos de los jugadores
             if (this.evaluacionManoJ1["valorMano"] > this.evaluacionManoJ2["valorMano"]) {
                 this.resultadoFinal =
                     "Gana el jugador 1 con " + this.evaluacionManoJ1["jugada"]
