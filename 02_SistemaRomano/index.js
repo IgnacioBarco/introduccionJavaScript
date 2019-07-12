@@ -14,6 +14,16 @@ let valoresRomanos = {
 }
 
 function validadorNumRomanos(numeroRomano) {
+    let expreg = /^([M]{0,3})(C{1,3}|CD|DC{0,3}|CM)?(X{0,3}|XL|LX{0,3}|XC)?(I{0,3}|IV|VI{0,3}|IX)?$/;
+
+    if (expreg.test(numeroRomano)) {
+        return "El numero romano " + numeroRomano + " es correcto";
+
+    } else {
+        return "El numero romano " + numeroRomano + " no es válido";
+
+    }
+
 
 }
 
@@ -30,9 +40,7 @@ function pasarNumRomanosAArabes(numeroRomano) {
 
 
     do {
-
-
-        console.log(arrayNum + " - " + arrayNum.length + "  - " + arrayAux4.length);
+        // console.log(arrayNum + " - " + arrayNum.length + "  - " + arrayAux4.length);
 
         for (let valor of Object.values(valoresRomanos)) {
 
@@ -133,7 +141,7 @@ function pasarNumRomanosAArabes(numeroRomano) {
         arrayAux3 = [""];
         arrayAux4 = [""];
 
-        console.log("sumamos " + resultado + " de " + resultadoString)
+        // console.log("sumamos " + resultado + " de " + resultadoString)
 
         if (arrayNum.length === 0) {
             fin = true;
@@ -143,7 +151,7 @@ function pasarNumRomanosAArabes(numeroRomano) {
 
     } while (!fin);
 
-    return numeroRomano + " es " + resultado;
+    return "El numero romano " + numeroRomano + " es " + resultado;
 }
 
 function pasarNumArabesARomanos(numeroArabe) {
@@ -161,8 +169,6 @@ function pasarNumArabesARomanos(numeroArabe) {
     } else {
         tipo = "u";
     }
-
-    console.log(numeroArabe);
 
     switch (tipo) {
         case "m":
@@ -192,19 +198,50 @@ function pasarNumArabesARomanos(numeroArabe) {
 
 
 
-console.log(pasarNumArabesARomanos(3578));
-console.log(pasarNumArabesARomanos(922));
-console.log(pasarNumArabesARomanos(439));
-console.log(pasarNumArabesARomanos(850));
-console.log(pasarNumArabesARomanos(47));
-console.log(pasarNumArabesARomanos(99));
-console.log(pasarNumArabesARomanos(2734));
-console.log(pasarNumArabesARomanos(3734));
+console.log("\n" + pasarNumArabesARomanos(89));
+console.log(pasarNumRomanosAArabes("LXXXIX"));
+console.log(validadorNumRomanos("LXXXIX"));
 
+console.log("\n" + pasarNumArabesARomanos(133));
+console.log(pasarNumRomanosAArabes("CXXXIII"));
+console.log(validadorNumRomanos("CXXXIII"));
 
-console.log(pasarNumRomanosAArabes("CDXXXIX"));
+console.log("\n" + pasarNumArabesARomanos(470));
+console.log(pasarNumRomanosAArabes("CDLXX"));
+console.log(validadorNumRomanos("CDLXX"));
+
+console.log("\n" + pasarNumArabesARomanos(850));
+console.log(pasarNumRomanosAArabes("DCCCL"));
+console.log(validadorNumRomanos("DCCCL"));
+
+console.log("\n" + pasarNumArabesARomanos(1147));
+console.log(pasarNumRomanosAArabes("MCXLVII"));
+console.log(validadorNumRomanos("MCXLVII"));
+
+console.log("\n" + pasarNumArabesARomanos(2758));
+console.log(pasarNumRomanosAArabes("MMDCCLVIII"));
+console.log(validadorNumRomanos("MMDCCLVIII"));
+
+console.log("\n" + pasarNumArabesARomanos(3121));
+console.log(pasarNumRomanosAArabes("MMMCXXI"));
+console.log(validadorNumRomanos("MMMCXXI"));
+
+console.log("\n" + pasarNumArabesARomanos(3333));
+console.log(pasarNumRomanosAArabes("MMMCCCXXXIII"));
+console.log(validadorNumRomanos("MMMCCCXXXIII"));
+
+console.log("\n" + pasarNumArabesARomanos(3650));
+console.log(pasarNumRomanosAArabes("MMMDCL"));
+console.log(validadorNumRomanos("MMMDCL"));
+
+console.log("\n" + pasarNumArabesARomanos(3734));
 console.log(pasarNumRomanosAArabes("MMMDCCXXXIV"));
-console.log(pasarNumRomanosAArabes("MMDCCXXXIV"));
+console.log(validadorNumRomanos("MMMDCCXXXIV"));
+
+console.log("\n----numeros-romanos-mal---")
+console.log(validadorNumRomanos("CCDXCXXCIXC"));
+console.log(validadorNumRomanos("MXMXMDCCXXXIVX"));
+console.log(validadorNumRomanos("MMDICCXXXIV"));
 
 
 
